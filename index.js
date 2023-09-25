@@ -46,29 +46,37 @@ const showInfo = (content) => {
   // Средняя температура
   const getAverageTemp = (temps) => Math.floor(temps
     .reduce((acc, elem) => Number(acc) + Number(elem), 0) / temps.length);
-  console.log(getAverageTemp(maxTemps));
-
-  const cititesAverageTemps = {};
-  // Решение через цикл
-  for (let i = 0; i < uniques.length; i += 1) {
-    cititesAverageTemps[uniques[i]] = [];
-  }
-
-  for (let i = 0; i < cities.length; i += 1) {
-    cititesAverageTemps[cities[i]].push(Number(data[i][1]));
-  }
-
-  // eslint-desable-next-line
-  for (const city in cititesAverageTemps) {
-    cititesAverageTemps[city] = getAverageTemp(cititesAverageTemps[city]);
-  }
-
-  const maxTempCity = Object.entries(cititesAverageTemps).reduce((acc, elem) => {
-    if (elem[1] > acc[1]) {
-      return elem;
-    } return acc;
+  // console.log(getAverageTemp(maxTemps));
+  const maxAverage = uniques.map((uniq) => {
+    const citiesDates = data.filter((el) => el[7] === uniq);
+    const citiesDatesTemps = citiesDates.map((el) => Number(el[1]));
+    const max = getAverageTemp(citiesDatesTemps);
+    return [uniq, max];
   });
-  console.log(`HottestCity: ${maxTempCity[0]}`);
+
+  const maxAverageCity = maxAverage.reduce((acc, elem) => (elem[1] > acc[1] ? elem : acc));
+  console.log(`HottestCity: ${maxAverageCity[0]}`);
+  // const cititesAverageTemps = {};
+  // Решение через цикл
+  // for (let i = 0; i < uniques.length; i += 1) {
+  //   cititesAverageTemps[uniques[i]] = [];
+  // }
+
+  // for (let i = 0; i < cities.length; i += 1) {
+  //   cititesAverageTemps[cities[i]].push(Number(data[i][1]));
+  // }
+
+  // // eslint-desable-next-line
+  // for (const city in cititesAverageTemps) {
+  //   cititesAverageTemps[city] = getAverageTemp(cititesAverageTemps[city]);
+  // }
+
+  // const maxTempCity = Object.entries(cititesAverageTemps).reduce((acc, elem) => {
+  //   if (elem[1] > acc[1]) {
+  //     return elem;
+  //   } return acc;
+  // });
+  // console.log(`HottestCity: ${maxTempCity[0]}`);
 };
 
 export default showInfo;
